@@ -1,4 +1,4 @@
-/* 건강 앱 톤: 회색 바탕 위 흰 요약 타일, 애플 시스템 색, 포인트는 건강 앱 분홍 */
+/* 건강 앱 톤: 회색 바탕 위 흰 요약 타일. 카테고리는 모양으로 구분하고, 색은 포인트 한 가지(+수입 초록, 저축 남색)만 */
 
 /* 아이폰·맥은 기기의 SF Pro + 애플 SD 산돌고딕 Neo를 그대로 쓰고,
  * 그 밖의 기기(Windows 노트북 등)만 이를 본뜬 Pretendard를 받아서 씀 (SIL OFL 무료 글꼴, fonts/Pretendard-LICENSE.txt) */
@@ -23,9 +23,9 @@
   --color-paper-3: #E9E9EE;    /* 눌림·트랙 */
   --color-ink: #1C1C1E; --color-ink-2: #3A3A3C; --color-muted: #6C6C70;
   --color-rule: #D8D8DC; --color-field-edge: #8E8E93;
-  --color-accent: #E0284B;      /* 건강 앱 분홍 (흰 글자 4.6:1) */
-  --color-accent-text: #E0284B; --color-accent-ink: #FFFFFF; --color-accent-soft: #FFE8EC; --color-focus: #007AFF;
-  --color-income: #23873D; --color-saving: #5856D6; --color-danger: #DB3329; --color-error: #DB3329;
+  /* 포인트 색 한 가지를 세 단계로: 채움(버튼), 글자·아이콘, 연한 바탕 */
+  --color-accent: #0071E3; --color-accent-text: #0068D6; --color-accent-ink: #FFFFFF; --color-accent-soft: #E8F1FD; --color-focus: #0071E3;
+  --color-income: #23873D; --color-income-fill: #23873D; --color-income-soft: #E6F4EA; --color-saving: #5856D6; --color-danger: #DB3329; --color-error: #DB3329;
   --color-glass: rgb(255 255 255 / 0.74); --color-glass-edge: rgb(0 0 0 / 0.08);
   --color-hud: rgb(28 28 30 / 0.94); --color-hud-ink: #FFFFFF;
   --color-scrim: rgb(0 0 0 / 0.3);
@@ -56,8 +56,8 @@
     --color-paper: #000000; --color-paper-2: #1C1C1E; --color-paper-3: #2C2C2E;
     --color-ink: #FFFFFF; --color-ink-2: #EBEBF0; --color-muted: #98989D;
     --color-rule: #38383A; --color-field-edge: #7C7C80;
-    --color-accent: #E0284B; --color-accent-text: #FF375F; --color-accent-ink: #FFFFFF; --color-accent-soft: #3A1520; --color-focus: #0A84FF;
-    --color-income: #30D158; --color-saving: #7876EA; --color-danger: #FF453A; --color-error: #FF453A;
+    --color-accent: #0071E3; --color-accent-text: #409CFF; --color-accent-ink: #FFFFFF; --color-accent-soft: #0F2740; --color-focus: #409CFF;
+    --color-income: #30D158; --color-income-fill: #23873D; --color-income-soft: #12301B; --color-saving: #7876EA; --color-danger: #FF453A; --color-error: #FF453A;
     --color-glass: rgb(44 44 46 / 0.78); --color-glass-edge: rgb(255 255 255 / 0.08);
     --color-hud: rgb(58 58 60 / 0.95);
     --color-scrim: rgb(0 0 0 / 0.55);

@@ -50,7 +50,7 @@ button { cursor: pointer; }
 .tile { background: var(--color-paper-2); border-radius: var(--radius-card); padding: var(--space-sm) var(--space-md); }
 .tile + .tile { margin-top: var(--space-xs); }
 .thead { display: flex; justify-content: space-between; align-items: center; gap: var(--space-sm); font-size: var(--text-sub); }
-.thead .ttl { font-weight: 600; color: var(--tt, var(--color-ink)); display: flex; align-items: center; gap: 6px; }
+.thead .ttl { font-weight: 700; color: var(--tt, var(--color-ink)); display: flex; align-items: center; gap: 6px; }
 .thead .ttl .ico { width: 18px; height: 18px; border-radius: 5px; font-size: 11px; }
 .thead .meta { color: var(--color-muted); font-size: var(--text-sm); white-space: nowrap; }
 .tbody { display: flex; justify-content: space-between; align-items: flex-end; gap: var(--space-sm); margin-top: var(--space-xs); }
@@ -64,11 +64,11 @@ button { cursor: pointer; }
 /* 그룹 목록 (내역·설정) */
 .group { background: var(--color-paper-2); border-radius: var(--radius-card); overflow: hidden; }
 .ghead { font-size: var(--text-sm); color: var(--color-muted); padding: 0 var(--space-md) var(--space-xs); margin-top: var(--space-lg); display: flex; justify-content: space-between; gap: var(--space-sm); }
-.ghead span:first-child { font-weight: 600; color: var(--color-ink-2); }
+.ghead span:first-child { font-weight: 700; color: var(--color-ink); font-size: var(--text-sub); }
 .gfoot { font-size: var(--text-sm); color: var(--color-muted); padding: var(--space-xs) var(--space-md) 0; }
 .row { display: flex; align-items: center; gap: var(--space-sm); min-height: 44px; padding: var(--space-xs) var(--space-md); position: relative; width: 100%; border: 0; background: none; text-align: left; }
 .row + .row::before { content: ""; position: absolute; top: 0; left: var(--space-md); right: 0; border-top: var(--rule-hair) solid var(--color-rule); }
-.row.inset + .row.inset::before { left: calc(var(--space-md) + 30px + var(--space-sm)); }
+.row.inset + .row.inset::before { left: calc(var(--space-md) + 32px + var(--space-sm)); }
 button.row { transition: background-color var(--dur-micro) var(--ease-out); }
 button.row:hover { background: var(--color-paper); }
 button.row:active { background: var(--color-paper-3); }
@@ -80,8 +80,10 @@ button.row:active { background: var(--color-paper-3); }
 .row.action { color: var(--color-accent-text); font-size: var(--text-md); }
 
 /* 카테고리 아이콘: 건강 앱의 둥근 사각 색 아이콘 */
-.ico { flex-shrink: 0; width: 30px; height: 30px; border-radius: var(--radius-icon); display: grid; place-items: center; background: var(--ic); color: #FFFFFF; font: 700 var(--text-sub)/1 var(--font-body); }
-.ico.big { width: 32px; height: 32px; border-radius: 8px; font-size: var(--text-md); }
+.ico { flex-shrink: 0; width: 32px; height: 32px; border-radius: var(--radius-icon); display: grid; place-items: center; background: var(--color-accent-soft); color: var(--color-accent-text); }
+.ico svg { width: 19px; height: 19px; stroke-width: 2; }
+.ico.big { width: 40px; height: 40px; border-radius: 11px; }
+.ico.big svg { width: 23px; height: 23px; }
 .tint-0 { --ic: var(--tint-0); --tc: var(--tint-0-text); } .tint-1 { --ic: var(--tint-1); --tc: var(--tint-1-text); }
 .tint-2 { --ic: var(--tint-2); --tc: var(--tint-2-text); } .tint-3 { --ic: var(--tint-3); --tc: var(--tint-3-text); }
 .tint-4 { --ic: var(--tint-4); --tc: var(--tint-4-text); } .tint-5 { --ic: var(--tint-5); --tc: var(--tint-5-text); }
@@ -98,15 +100,19 @@ button.row:active { background: var(--color-paper-3); }
 .amount input:focus-visible { outline: 2px solid transparent; box-shadow: 0 2px 0 var(--tt); }
 .amount input::placeholder { color: var(--color-field-edge); }
 .amount .won { font: 600 var(--text-lg)/1 var(--font-display); color: var(--color-muted); }
-.label { font-size: var(--text-sm); color: var(--color-muted); padding: 0 var(--space-2xs) var(--space-xs); margin-top: var(--space-md); }
-.form .label { margin-top: var(--space-sm); padding-bottom: 6px; }
+.label { font: 700 var(--text-md)/1.2 var(--font-display); color: var(--color-ink); padding: 0 var(--space-2xs) var(--space-xs); margin-top: var(--space-lg); }
+.form .label { font-size: var(--text-sub); margin-top: var(--space-sm); padding-bottom: 6px; }
 
 /* 카테고리 격자: 작은 흰 타일 */
 .cats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
-.cat { border: 0; background: var(--color-paper-2); border-radius: 10px; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 7px var(--space-3xs) 6px; font-size: var(--text-sm); line-height: 1.2; color: var(--color-ink); word-break: keep-all; text-align: center; box-shadow: var(--shadow-card); transition: transform var(--dur-micro) var(--ease-out); }
+.cat { border: 0; background: var(--color-paper-2); border-radius: 10px; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 6px var(--space-3xs) 6px; font-size: var(--text-sm); font-weight: 500; line-height: 1.2; color: var(--color-ink); word-break: keep-all; text-align: center; box-shadow: var(--shadow-card); transition: transform var(--dur-micro) var(--ease-out); }
 .cat:hover { background: var(--color-paper); }
 .cat:active { transform: scale(0.96); }
-.cat[aria-pressed="true"] { box-shadow: inset 0 0 0 2px var(--tc); color: var(--tc); font-weight: 600; }
+.cat[aria-pressed="true"] { box-shadow: inset 0 0 0 2px var(--color-accent); font-weight: 700; }
+.cat[aria-pressed="true"] .ico { background: var(--color-accent); color: var(--color-accent-ink); }
+.form[data-type="income"] .ico { background: var(--color-income-soft); color: var(--color-income); }
+.form[data-type="income"] .cat[aria-pressed="true"] { box-shadow: inset 0 0 0 2px var(--color-income-fill); }
+.form[data-type="income"] .cat[aria-pressed="true"] .ico { background: var(--color-income-fill); color: #FFFFFF; }
 
 /* 결제수단 캡슐 */
 .chips { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
@@ -114,7 +120,7 @@ button.row:active { background: var(--color-paper-3); }
 .chip:hover { background: var(--color-paper-3); }
 .chip:active { opacity: 0.7; }
 .chip[aria-pressed="true"] { background: var(--color-accent); color: var(--color-accent-ink); font-weight: 600; }
-.form[data-type="income"] .chip[aria-pressed="true"] { background: var(--tint-3); }
+.form[data-type="income"] .chip[aria-pressed="true"] { background: var(--color-income-fill); }
 
 /* 입력칸 */
 .field { width: 100%; min-height: 36px; border: 0; border-radius: var(--radius-control); background: var(--color-paper-2); box-shadow: inset 0 0 0 1px var(--color-field-edge); padding: var(--space-xs) var(--space-sm); font-size: var(--text-md); color: var(--color-ink); }
@@ -129,7 +135,7 @@ textarea.field { min-height: 11rem; line-height: 1.6; resize: vertical; border-r
 
 /* 버튼 */
 .btn { border: 0; border-radius: var(--radius-card); width: 100%; min-height: 50px; padding: 0 var(--space-md); font: 600 var(--text-md)/1 var(--font-body); white-space: nowrap; background: var(--color-accent); color: var(--color-accent-ink); transition: opacity var(--dur-micro) var(--ease-out), transform var(--dur-micro) var(--ease-out); }
-.form[data-type="income"] .btn:not(.plain) { background: var(--tint-3); }
+.form[data-type="income"] .btn:not(.plain) { background: var(--color-income-fill); }
 .btn:hover { opacity: 0.9; }
 .btn:active { transform: scale(0.98); }
 .btn:disabled { opacity: 0.55; cursor: not-allowed; }
@@ -180,7 +186,7 @@ textarea.field { min-height: 11rem; line-height: 1.6; resize: vertical; border-r
 .weekbars i { width: 10px; min-height: 3px; border-radius: 3px; background: var(--color-accent); opacity: 0.3; }
 .weekbars i.now { opacity: 1; }
 .prog { width: 112px; height: 8px; border-radius: 4px; background: var(--color-paper-3); overflow: hidden; flex-shrink: 0; margin-bottom: 6px; }
-.prog i { display: block; height: 100%; border-radius: 4px; background: var(--pc, var(--color-income)); transform-origin: left center; }
+.prog i { display: block; height: 100%; border-radius: 4px; background: var(--color-saving); transform-origin: left center; }
 .split { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-sm); margin-top: var(--space-sm); padding-top: var(--space-sm); border-top: var(--rule-hair) solid var(--color-rule); }
 .split .k { font-size: var(--text-xs); color: var(--color-muted); }
 .split .v { font-size: var(--text-sub); font-weight: 600; margin-top: 2px; white-space: nowrap; }
@@ -192,14 +198,25 @@ textarea.field { min-height: 11rem; line-height: 1.6; resize: vertical; border-r
 .catrow .nm { flex: 1; min-width: 0; font-size: var(--text-md); }
 .catrow .v { font-size: var(--text-md); font-weight: 600; white-space: nowrap; }
 .catrow .pct { font-size: var(--text-sm); color: var(--color-muted); margin-left: var(--space-2xs); font-weight: 400; display: inline-block; min-width: 2.6em; text-align: right; }
-.catrow .track { height: 6px; border-radius: 3px; background: var(--color-paper-3); margin: 6px 0 0 calc(30px + var(--space-sm)); overflow: hidden; }
-.catrow .fill { height: 100%; border-radius: 3px; background: var(--ic); transform-origin: left center; }
+.catrow .track { height: 6px; border-radius: 3px; background: var(--color-paper-3); margin: 6px 0 0 calc(32px + var(--space-sm)); overflow: hidden; }
+.catrow .fill { height: 100%; border-radius: 3px; background: var(--color-accent); transform-origin: left center; }
 .cmprow { display: flex; align-items: center; gap: var(--space-sm); padding: var(--space-xs) 0; }
 .cmprow + .cmprow { border-top: var(--rule-hair) solid var(--color-rule); }
 .cmprow .nm { flex: 1; min-width: 0; }
 .cmprow .nm .s { display: block; font-size: var(--text-sm); color: var(--color-muted); }
 .diff { font-size: var(--text-sub); font-weight: 600; min-width: 4.5rem; text-align: right; }
 .diff.up { color: var(--color-danger); } .diff.down { color: var(--color-income); }
+
+/* 아이콘 고르기 */
+.icongrid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--space-xs); }
+.iconpick { border: 0; background: var(--color-paper-2); border-radius: 10px; min-height: 64px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; font-size: var(--text-xs); color: var(--color-ink-2); box-shadow: var(--shadow-card); }
+.iconpick svg { width: 24px; height: 24px; }
+.iconpick:hover { background: var(--color-paper); }
+.iconpick:active { opacity: 0.7; }
+.iconpick[aria-pressed="true"] { box-shadow: inset 0 0 0 2px var(--color-accent-text); color: var(--color-accent-text); font-weight: 600; }
+button.ico { border: 0; cursor: pointer; }
+button.ico:hover { background: var(--color-rule); }
+button.ico:active { opacity: 0.6; }
 
 /* 시트 */
 .backdrop { position: fixed; inset: 0; background: var(--color-scrim); z-index: var(--z-modal); display: flex; align-items: flex-end; justify-content: center; }
@@ -376,9 +393,53 @@ const isSaving = r => r.type === 'expense' && cat(r.categoryId)?.special === 'sa
 const catName = id => cat(id)?.name ?? '알 수 없음';
 const methodName = id => method(id)?.name ?? '';
 const firstChar = name => Array.from((name || '?').replace(/[^\p{L}\p{N}]/gu, ''))[0] || '?';
-const tintOf = c => (c && typeof c.tint === 'number') ? c.tint : 11;
+/* 카테고리 아이콘: 색 대신 모양으로 구분 (직접 그린 선 아이콘, 24칸 기준) */
+const ICONS = {
+  meal: ['식사', '<path d="M7 3v18M4.5 3v4.5a2.5 2.5 0 0 0 5 0V3M17 21V3c-2.2 1.6-3.2 4.3-3.2 8.5H17"/>'],
+  cafe: ['카페', '<path d="M5 9h11v5a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5zM16 10.5h1.5a2.5 2.5 0 0 1 0 5H16M9 3.5v2.5M12.5 3.5v2.5"/>'],
+  bus: ['교통', '<rect x="5" y="3" width="14" height="15" rx="3"/><path d="M5 11h14M8 18v2.5M16 18v2.5M8.5 14.5h.01M15.5 14.5h.01"/>'],
+  bag: ['쇼핑', '<path d="M5 8h14l-1.2 12H6.2zM9 10V6.5a3 3 0 0 1 6 0V10"/>'],
+  ticket: ['여가', '<path d="M4 6h16v3.5a2.5 2.5 0 0 0 0 5V18H4v-3.5a2.5 2.5 0 0 0 0-5zM14.5 6v2M14.5 11v2M14.5 16v2"/>'],
+  book: ['책', '<path d="M12 6.5C10 5 7 4.5 4 4.5v13.5c3 0 6 .5 8 2 2-1.5 5-2 8-2V4.5c-3 0-6 .5-8 2zM12 6.5V20"/>'],
+  phone: ['휴대폰', '<rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/>'],
+  gift: ['선물', '<rect x="4" y="8" width="16" height="4" rx="1"/><path d="M5.5 12v8h13v-8M12 8v12M12 8C10.5 5 7 4.5 7 6.6S10 8 12 8c2 0 5 .7 5-1.4S13.5 5 12 8"/>'],
+  scissors: ['미용', '<circle cx="6.5" cy="6.5" r="2.5"/><circle cx="6.5" cy="17.5" r="2.5"/><path d="M8.6 7.9 20 17M8.6 16.1 20 7"/>'],
+  plane: ['여행', '<path d="M10.5 4.5a1.5 1.5 0 0 1 3 0V9l7 4.5v2l-7-2.5v4.5l2 1.5v1.5L12 19.5l-3.5 1V19l2-1.5V13l-7 2.5v-2l7-4.5z"/>'],
+  dots: ['기타', '<path d="M6 12h.01M12 12h.01M18 12h.01" stroke-width="3"/>'],
+  coins: ['저축', '<ellipse cx="12" cy="6" rx="7" ry="2.5"/><path d="M5 6v4c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5V6M5 10v4c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5v-4M5 14v4c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5v-4"/>'],
+  wallet: ['지갑', '<path d="M4 7.5h14a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zM4 7.5 15 4.5v3M16 14h.01"/>'],
+  pencil: ['과외', '<path d="M15 5l4 4L9 19H5v-4zM13 7l4 4"/>'],
+  briefcase: ['알바', '<rect x="3" y="7" width="18" height="12" rx="2"/><path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7M3 12.5h18"/>'],
+  cap: ['장학금', '<path d="M2.5 9 12 4.5 21.5 9 12 13.5zM6.5 11v4.5c0 1.5 2.5 3 5.5 3s5.5-1.5 5.5-3V11M21.5 9v5"/>'],
+  home: ['집', '<path d="M4 11 12 4l8 7v9h-5v-6H9v6H4z"/>'],
+  cart: ['장보기', '<path d="M3 4h2l2.4 11h10.4l2-8H6.3"/><circle cx="9.5" cy="19" r="1.5"/><circle cx="17" cy="19" r="1.5"/>'],
+  dumbbell: ['운동', '<path d="M6.5 7.5v9M3.5 10v4M17.5 7.5v9M20.5 10v4M6.5 12h11"/>'],
+  game: ['게임', '<rect x="3" y="7.5" width="18" height="10" rx="5"/><path d="M8 10.5v4M6 12.5h4M15.5 11.5h.01M17.5 13.5h.01"/>'],
+  music: ['음악', '<path d="M9 18V5.5l11-2V16"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/>'],
+  film: ['영화', '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7.5 5v14M16.5 5v14M3 9.5h4.5M3 14.5h4.5M16.5 9.5H21M16.5 14.5H21"/>'],
+  car: ['자동차', '<path d="M5 16.5V12l2-5h10l2 5v4.5zM5 12h14M7.5 16.5V19M16.5 16.5V19M8 14.2h.01M16 14.2h.01"/>'],
+  paw: ['반려동물', '<circle cx="7" cy="10" r="1.6"/><circle cx="10.5" cy="6.5" r="1.6"/><circle cx="13.5" cy="6.5" r="1.6"/><circle cx="17" cy="10" r="1.6"/><path d="M12 11.5c-2.5 0-5 3.5-5 6 0 1.5 1.2 2 2.5 2 1 0 1.6-.5 2.5-.5s1.5.5 2.5.5c1.3 0 2.5-.5 2.5-2 0-2.5-2.5-6-5-6z"/>'],
+  tag: ['태그', '<path d="M3.5 12.5V4h8.5l9 9-8.5 8.5z"/><circle cx="8" cy="8.5" r="1.2"/>']
+};
+const ICON_BY_NAME = { '식사': 'meal', '카페·간식': 'cafe', '교통': 'bus', '쇼핑': 'bag', '여가·문화': 'ticket', '교육·도서': 'book', '통신·구독': 'phone', '선물·경조사': 'gift', '미용': 'scissors', '여행': 'plane', '기타': 'dots', '저축': 'coins', '용돈': 'wallet', '과외': 'pencil', '알바': 'briefcase', '장학금': 'cap' };
+function ensureIcons() {
+  let changed = false;
+  for (const c of S.settings.categories) {
+    if (!c.icon || !ICONS[c.icon]) { c.icon = c.special === 'saving' ? 'coins' : c.special === 'etc' ? 'dots' : (ICON_BY_NAME[c.name] || 'tag'); changed = true; }
+  }
+  return changed;
+}
+const svgIcon = key => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${(ICONS[key] || ICONS.tag)[1]}</svg>`;
 function mono(c, big) {
-  return h('span', { class: `ico tint-${tintOf(c)}${big ? ' big' : ''}`, 'aria-hidden': 'true' }, firstChar(c?.name));
+  return h('span', { class: `ico${big ? ' big' : ''}`, 'aria-hidden': 'true', html: svgIcon(c?.icon) });
+}
+function pickIcon(c) {
+  let close;
+  const grid = h('div', { class: 'icongrid' }, Object.entries(ICONS).map(([k, [label]]) => h('button', {
+    class: 'iconpick', 'aria-pressed': String(c.icon === k), 'aria-label': label,
+    onclick: async () => { c.icon = k; await saveSettings(); close(); render(); toast('아이콘을 바꿨어요'); }
+  }, h('span', { html: svgIcon(k), style: 'display:contents' }), label)));
+  close = openSheet(`'${c.name}' 아이콘`, grid);
 }
 
 function sortRecords() {
@@ -517,7 +578,6 @@ function recordForm(f, { submitLabel, onSubmit, onDelete, recurring = false }) {
         e.currentTarget.setAttribute('aria-pressed', 'true');
       }
     }, mono(c, true), c.name));
-    catBtns.forEach((b, i) => b.classList.add('tint-' + tintOf(shown[i])));
 
     const methods = activeMethods(f.type);
     if (f.methodId && !methods.some(m => m.id === f.methodId) && method(f.methodId)) methods.push(method(f.methodId));
@@ -809,7 +869,7 @@ function viewStats() {
     h('p', { class: 'tnote' }, trend));
 
   // 저축 타일: 저축률 + 수입·저축·남은 돈
-  const saveTile = h('div', { class: 'tile tt-green' },
+  const saveTile = h('div', { class: 'tile tt-indigo' },
     h('div', { class: 'thead' }, h('span', { class: 'ttl' }, '저축률'), h('span', { class: 'meta' }, '저축 ÷ 수입')),
     h('div', { class: 'tbody' },
       rateNum == null
@@ -830,7 +890,7 @@ function viewStats() {
     sorted.length
       ? h('div', { class: 'catlist' }, sorted.map(([id, v]) => {
           const c = cat(id);
-          return h('div', { class: 'catrow tint-' + tintOf(c) },
+          return h('div', { class: 'catrow' },
             h('div', { class: 'top' }, mono(c), h('span', { class: 'nm' }, catName(id)),
               h('span', { class: 'v' }, won(v) + '원', h('span', { class: 'pct' }, Math.round(v / s.spend * 100) + '%'))),
             h('div', { class: 'track', 'aria-hidden': 'true' }, h('div', { class: 'fill', style: `transform:scaleX(${Math.max(0.02, v / max)})` })));
@@ -869,7 +929,7 @@ function listEditor({ items, withMono, protectedFn, onAdd, onRename, onMove, onD
   const nameIn = h('input', { class: 'field', name: 'new-name', autocomplete: 'off', placeholder: '새 이름', 'aria-label': '새 이름', maxlength: 20 });
   return h('div', { class: 'group' },
     items.map((it, i) => h('div', { class: 'row' + (withMono ? ' inset' : '') },
-      withMono ? mono(it) : null,
+      withMono ? h('button', { class: 'ico', 'aria-label': `${it.name} 아이콘 바꾸기`, html: svgIcon(it.icon), onclick: () => pickIcon(it) }) : null,
       h('span', { class: 'grow' }, h('span', { class: 't' }, it.name), protectedFn(it) ? h('span', { class: 's' }, protectedFn(it)) : null),
       h('button', { class: 'mini', 'aria-label': `${it.name} 위로`, disabled: i === 0, onclick: () => onMove(it, -1) }, icon('up')),
       h('button', { class: 'mini', 'aria-label': `${it.name} 아래로`, disabled: i === items.length - 1, onclick: () => onMove(it, 1) }, icon('down')),
@@ -928,7 +988,7 @@ function viewSettings() {
   const catsEditor = listEditor({
     items: activeCats(type), withMono: true,
     protectedFn: c => c.special === 'saving' ? '소비 합계에서 제외' : c.special === 'etc' ? '삭제 불가' : null,
-    onAdd: async name => { st.categories.push({ id: 'c' + uid().slice(0, 8), type, emoji: '', name, special: null, hidden: false, tint: nextTint(type) }); await persist(); toast('추가했어요'); },
+    onAdd: async name => { st.categories.push({ id: 'c' + uid().slice(0, 8), type, emoji: '', name, special: null, hidden: false, tint: nextTint(type), icon: 'tag' }); await persist(); toast('추가했어요. 왼쪽 아이콘을 눌러 모양을 고를 수 있어요'); },
     onRename: async c => { const n = prompt('카테고리 이름', c.name); if (n == null || !n.trim()) return; c.name = n.trim(); await persist(); },
     onMove: async (c, d) => { moveIn(st.categories, c, d, x => x.type === type && !x.hidden); await persist(); },
     onDelete: async c => {
@@ -1030,7 +1090,7 @@ async function importBackup(file) {
   const prevBackup = S.settings.lastBackup;
   S.settings = { ...defaultSettings(), ...data.settings, installHintDismissed: S.settings.installHintDismissed };
   S.settings.lastBackup = [prevBackup, data.settings.lastBackup, data.exportedAt].filter(Boolean).sort().pop() || null;
-  ensureTints();
+  ensureTints(); ensureIcons();
   await saveSettings();
   UI.draft = null; render(); toast(`${data.records.length}건을 불러왔어요`);
 }
@@ -1051,7 +1111,7 @@ function exportCSV() {
     db = await openDB();
     const kv = await kvGet('settings');
     S.settings = kv?.value ?? defaultSettings();
-    const tinted = ensureTints();
+    const tinted = ensureTints() | ensureIcons();
     if (!kv || tinted) await saveSettings();
     S.records = await dbAll(); sortRecords();
     const n = await runRecurring();
