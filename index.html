@@ -64,7 +64,8 @@ button { cursor: pointer; }
 /* 그룹 목록 (내역·설정) */
 .group { background: var(--color-paper-2); border-radius: var(--radius-card); overflow: hidden; }
 .ghead { font-size: var(--text-sm); color: var(--color-muted); padding: 0 var(--space-md) var(--space-xs); margin-top: var(--space-lg); display: flex; justify-content: space-between; gap: var(--space-sm); }
-.ghead span:first-child { font-weight: 700; color: var(--color-ink); font-size: var(--text-sub); }
+.ghead span:first-child { font-weight: 700; color: var(--color-ink); font-size: var(--text-sub); white-space: nowrap; flex-shrink: 0; }
+.ghead span:last-child { text-align: right; }
 .gfoot { font-size: var(--text-sm); color: var(--color-muted); padding: var(--space-xs) var(--space-md) 0; }
 .row { display: flex; align-items: center; gap: var(--space-sm); min-height: 44px; padding: var(--space-xs) var(--space-md); position: relative; width: 100%; border: 0; background: none; text-align: left; }
 .row + .row::before { content: ""; position: absolute; top: 0; left: var(--space-md); right: 0; border-top: var(--rule-hair) solid var(--color-rule); }
@@ -111,6 +112,12 @@ button.row:active { background: var(--color-paper-3); }
 .cat[aria-pressed="true"] { box-shadow: inset 0 0 0 2px var(--color-accent); font-weight: 700; }
 .cat[aria-pressed="true"] .ico { background: var(--color-accent); color: var(--color-accent-ink); }
 .form[data-type="income"] .ico { background: var(--color-income-soft); color: var(--color-income); }
+.form[data-type="saving"] .ico { background: var(--color-saving-soft); color: var(--color-saving); }
+.form[data-type="saving"] .cat[aria-pressed="true"] { box-shadow: inset 0 0 0 2px var(--color-saving-fill); }
+.form[data-type="saving"] .cat[aria-pressed="true"] .ico { background: var(--color-saving-fill); color: #FFFFFF; }
+.form[data-type="saving"] .amt-tile { --tt: var(--color-saving); }
+.form[data-type="saving"] .chip[aria-pressed="true"] { background: var(--color-saving-fill); }
+.form[data-type="saving"] .btn:not(.plain) { background: var(--color-saving-fill); }
 .form[data-type="income"] .cat[aria-pressed="true"] { box-shadow: inset 0 0 0 2px var(--color-income-fill); }
 .form[data-type="income"] .cat[aria-pressed="true"] .ico { background: var(--color-income-fill); color: #FFFFFF; }
 
@@ -130,6 +137,12 @@ button.row:active { background: var(--color-paper-3); }
 .row .field.plain:focus-visible { outline-offset: 4px; }
 .pill-date { border: 0; border-radius: 7px; background: var(--color-paper-3); padding: var(--space-2xs) var(--space-sm); font-size: var(--text-md); color: var(--color-ink); min-height: 34px; box-shadow: inset 0 0 0 1px var(--color-field-edge); -webkit-appearance: none; appearance: none; }
 .pill-date:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 0; }
+/* iOS 스위치 */
+.switch { -webkit-appearance: none; appearance: none; position: relative; flex-shrink: 0; margin: 0; width: 51px; height: 31px; border-radius: var(--radius-pill); background: var(--color-paper-3); box-shadow: inset 0 0 0 1px var(--color-field-edge); cursor: pointer; transition: background-color var(--dur-short) var(--ease-out); }
+.switch::after { content: ""; position: absolute; top: 2px; left: 2px; width: 27px; height: 27px; border-radius: 50%; background: #FFFFFF; box-shadow: 0 2px 4px rgb(0 0 0 / 0.2); transition: transform var(--dur-short) var(--ease-out); }
+.switch:checked { background: var(--color-saving-fill); box-shadow: none; }
+.switch:checked::after { transform: translateX(20px); }
+.switch:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
 textarea.field { min-height: 11rem; line-height: 1.6; resize: vertical; border-radius: var(--radius-card); }
 .err { color: var(--color-error); font-size: var(--text-sm); min-height: 1lh; margin: var(--space-3xs) var(--space-2xs) 0; }
 
@@ -160,7 +173,7 @@ textarea.field { min-height: 11rem; line-height: 1.6; resize: vertical; border-r
 .search svg { position: absolute; left: var(--space-sm); top: 50%; width: 16px; height: 16px; transform: translateY(-50%); color: var(--color-muted); }
 
 .amt { font-size: var(--text-md); font-weight: 600; white-space: nowrap; color: var(--color-ink); }
-.amt.income { color: var(--color-income); } .amt.saving { color: var(--color-saving); }
+.amt.income { color: var(--color-income); } .amt.saving { color: var(--color-saving); } .amt.out { color: var(--color-muted); }
 .badge-repeat { font-size: var(--text-xs); color: var(--color-muted); margin-left: var(--space-2xs); }
 .empty { padding: var(--space-xl) var(--space-md); text-align: center; color: var(--color-muted); font-size: var(--text-sub); }
 .empty strong { display: block; color: var(--color-ink); font-size: var(--text-md); margin-bottom: var(--space-2xs); }
@@ -205,7 +218,7 @@ textarea.field { min-height: 11rem; line-height: 1.6; resize: vertical; border-r
 .cmprow .nm { flex: 1; min-width: 0; }
 .cmprow .nm .s { display: block; font-size: var(--text-sm); color: var(--color-muted); }
 .diff { font-size: var(--text-sub); font-weight: 600; min-width: 4.5rem; text-align: right; }
-.diff.up { color: var(--color-danger); } .diff.down { color: var(--color-income); }
+.diff.up { color: var(--color-danger); } .diff.down { color: var(--color-income); } .diff.save { color: var(--color-saving); } .diff.none { color: var(--color-muted); font-weight: 400; }
 
 /* 아이콘 고르기 */
 .icongrid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--space-xs); }
@@ -256,21 +269,26 @@ const DEFAULT_RULES = [
   '카드 대금 출금은 기록하지 않음 (결제할 때 이미 기록함)',
   '카카오페이 충전은 기록하지 않음 (결제할 때만 기록)',
   'N빵은 내 몫만 지출로 적고, 돌려받은 돈은 수입에 적지 않음',
-  '적금·청약·투자로 옮긴 돈은 지출 탭의 \'저축\''
+  '저축 계좌에 넣은 돈은 저축 탭의 \'넣기\'',
+  '파킹통장에서 생활비로 꺼낸 돈은 저축 탭의 \'꺼내기\'',
+  '저축 계좌끼리 옮긴 돈은 기록하지 않음'
 ].map(s => '- ' + s).join('\n');
+const OLD_SAVING_RULE = "- 적금·청약·투자로 옮긴 돈은 지출 탭의 '저축'";
+const NEW_SAVING_RULES = DEFAULT_RULES.split('\n').slice(-3).join('\n');
 
 function defaultSettings() {
   let n = 0;
   const c = (type, emoji, name, special = null) => ({ id: type[0] + (++n), type, emoji, name, special, hidden: false });
   return {
-    version: 1,
+    version: 2,
     categories: [
       c('expense', '🍚', '식사'), c('expense', '☕', '카페·간식'), c('expense', '🚇', '교통'),
       c('expense', '🛍️', '쇼핑'), c('expense', '🎮', '여가·문화'), c('expense', '📚', '교육·도서'),
       c('expense', '📱', '통신·구독'), c('expense', '🎁', '선물·경조사'), c('expense', '💇', '미용'),
-      c('expense', '✈️', '여행'), c('expense', '📦', '기타', 'etc'), c('expense', '💰', '저축', 'saving'),
+      c('expense', '✈️', '여행'), c('expense', '📦', '기타', 'etc'),
       c('income', '💵', '용돈'), c('income', '🧑‍🏫', '과외'), c('income', '💼', '알바'),
-      c('income', '🎓', '장학금'), c('income', '📦', '기타', 'etc')
+      c('income', '🎓', '장학금'), c('income', '📦', '기타', 'etc'),
+      c('saving', '', '청년도약계좌'), c('saving', '', '파킹통장'), c('saving', '', 'ISA')
     ],
     methods: [
       { id: 'm1', type: 'expense', name: '토스 체크카드', hidden: false },
@@ -279,6 +297,7 @@ function defaultSettings() {
       { id: 'm4', type: 'income', name: 'KB국민은행', hidden: false }
     ],
     lastMethod: { expense: 'm1', income: 'm4' },
+    lastSavingAccount: null,
     recurring: [],
     rules: DEFAULT_RULES,
     lastBackup: null,
@@ -389,7 +408,32 @@ const cat = id => S.settings.categories.find(c => c.id === id);
 const method = id => S.settings.methods.find(m => m.id === id);
 const activeCats = type => S.settings.categories.filter(c => c.type === type && !c.hidden);
 const activeMethods = type => S.settings.methods.filter(m => m.type === type && !m.hidden);
-const isSaving = r => r.type === 'expense' && cat(r.categoryId)?.special === 'saving';
+const isSaving = r => r.type === 'saving';
+const TYPE_LABEL = { expense: '지출', income: '수입', saving: '저축' };
+
+/* 예전 버전의 '지출 > 저축' 카테고리 기록을 저축 탭으로 옮김 (한 번만, 여러 번 돌려도 안전) */
+function migrateSaving() {
+  const st = S.settings; let changed = false; const moved = [];
+  if (!st.categories.some(c => c.type === 'saving')) {
+    for (const [name, icon] of [['청년도약계좌', 'sprout'], ['파킹통장', 'vault'], ['ISA', 'chart']])
+      st.categories.push({ id: 's' + uid().slice(0, 8), type: 'saving', emoji: '', name, special: null, hidden: false, icon });
+    changed = true;
+  }
+  const oldIds = new Set(st.categories.filter(c => c.type === 'expense' && c.special === 'saving').map(c => c.id));
+  if (oldIds.size) {
+    let legacy = null;
+    const acc = () => legacy || (legacy = st.categories.find(c => c.type === 'saving' && c.legacy) ||
+      (st.categories.push({ id: 's' + uid().slice(0, 8), type: 'saving', emoji: '', name: '이전 저축 기록', special: null, hidden: false, icon: 'coins', legacy: true }), st.categories[st.categories.length - 1]));
+    for (const r of S.records) if (r.type === 'expense' && oldIds.has(r.categoryId)) { r.type = 'saving'; r.dir = 'in'; r.categoryId = acc().id; r.methodId = null; moved.push(r); }
+    for (const r of st.recurring) if (r.type === 'expense' && oldIds.has(r.categoryId)) { r.type = 'saving'; r.dir = 'in'; r.categoryId = acc().id; r.methodId = null; }
+    for (const c of st.categories) if (oldIds.has(c.id)) { c.hidden = true; c.special = 'legacy-saving'; }
+    changed = true;
+  }
+  if (st.rules && st.rules.includes(OLD_SAVING_RULE)) { st.rules = st.rules.replace(OLD_SAVING_RULE, NEW_SAVING_RULES); changed = true; }
+  if (!('lastSavingAccount' in st)) { st.lastSavingAccount = null; changed = true; }
+  if (st.version !== 2) { st.version = 2; changed = true; }
+  return { changed, moved };
+}
 const catName = id => cat(id)?.name ?? '알 수 없음';
 const methodName = id => method(id)?.name ?? '';
 const firstChar = name => Array.from((name || '?').replace(/[^\p{L}\p{N}]/gu, ''))[0] || '?';
@@ -406,6 +450,11 @@ const ICONS = {
   scissors: ['미용', '<circle cx="6.5" cy="6.5" r="2.5"/><circle cx="6.5" cy="17.5" r="2.5"/><path d="M8.6 7.9 20 17M8.6 16.1 20 7"/>'],
   plane: ['여행', '<path d="M10.5 4.5a1.5 1.5 0 0 1 3 0V9l7 4.5v2l-7-2.5v4.5l2 1.5v1.5L12 19.5l-3.5 1V19l2-1.5V13l-7 2.5v-2l7-4.5z"/>'],
   dots: ['기타', '<path d="M6 12h.01M12 12h.01M18 12h.01" stroke-width="3"/>'],
+  sprout: ['도약', '<path d="M12 21v-9M12 12C12 8 9 5.5 4.5 5.5 4.5 10 7.5 12 12 12zM12 14.5c0-3.5 2.5-6 7-6 0 4-2.5 6-7 6z"/>'],
+  vault: ['파킹', '<rect x="3.5" y="4.5" width="17" height="14.5" rx="2"/><circle cx="12" cy="11.75" r="3.5"/><path d="M12 8.25v1M12 14.25v1M8.5 11.75h1M14.5 11.75h1M7 19v2M17 19v2"/>'],
+  chart: ['투자', '<path d="M4 19.5h16M5 15.5l4.5-4.5 3.5 3L19 7.5M15 7.5h4v4"/>'],
+  bank: ['은행', '<path d="M3.5 9.5 12 4.5l8.5 5zM5.5 10.5v6.5M9.5 10.5v6.5M14.5 10.5v6.5M18.5 10.5v6.5M3.5 19.5h17"/>'],
+  percent: ['이자', '<path d="M18.5 5.5l-13 13"/><circle cx="7" cy="7" r="2.5"/><circle cx="17" cy="17" r="2.5"/>'],
   coins: ['저축', '<ellipse cx="12" cy="6" rx="7" ry="2.5"/><path d="M5 6v4c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5V6M5 10v4c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5v-4M5 14v4c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5v-4"/>'],
   wallet: ['지갑', '<path d="M4 7.5h14a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zM4 7.5 15 4.5v3M16 14h.01"/>'],
   pencil: ['과외', '<path d="M15 5l4 4L9 19H5v-4zM13 7l4 4"/>'],
@@ -421,11 +470,13 @@ const ICONS = {
   paw: ['반려동물', '<circle cx="7" cy="10" r="1.6"/><circle cx="10.5" cy="6.5" r="1.6"/><circle cx="13.5" cy="6.5" r="1.6"/><circle cx="17" cy="10" r="1.6"/><path d="M12 11.5c-2.5 0-5 3.5-5 6 0 1.5 1.2 2 2.5 2 1 0 1.6-.5 2.5-.5s1.5.5 2.5.5c1.3 0 2.5-.5 2.5-2 0-2.5-2.5-6-5-6z"/>'],
   tag: ['태그', '<path d="M3.5 12.5V4h8.5l9 9-8.5 8.5z"/><circle cx="8" cy="8.5" r="1.2"/>']
 };
-const ICON_BY_NAME = { '식사': 'meal', '카페·간식': 'cafe', '교통': 'bus', '쇼핑': 'bag', '여가·문화': 'ticket', '교육·도서': 'book', '통신·구독': 'phone', '선물·경조사': 'gift', '미용': 'scissors', '여행': 'plane', '기타': 'dots', '저축': 'coins', '용돈': 'wallet', '과외': 'pencil', '알바': 'briefcase', '장학금': 'cap' };
+const ICON_BY_NAME = { '식사': 'meal', '카페·간식': 'cafe', '교통': 'bus', '쇼핑': 'bag', '여가·문화': 'ticket', '교육·도서': 'book', '통신·구독': 'phone', '선물·경조사': 'gift', '미용': 'scissors', '여행': 'plane', '기타': 'dots', '저축': 'coins', '용돈': 'wallet', '과외': 'pencil', '알바': 'briefcase', '장학금': 'cap', '청년도약계좌': 'sprout', '파킹통장': 'vault', 'ISA': 'chart', '청약통장': 'bank' };
 function ensureIcons() {
   let changed = false;
   for (const c of S.settings.categories) {
     if (!c.icon || !ICONS[c.icon]) { c.icon = c.special === 'saving' ? 'coins' : c.special === 'etc' ? 'dots' : (ICON_BY_NAME[c.name] || 'tag'); changed = true; }
+    // 저축 계좌의 '지금까지 넣은 돈' 표시 여부. 부모님 돈이 섞이는 청년도약계좌만 처음부터 끔
+    if (c.type === 'saving' && !('showTotal' in c)) { c.showTotal = c.name !== '청년도약계좌'; changed = true; }
   }
   return changed;
 }
@@ -460,7 +511,8 @@ async function runRecurring() {
       if (occ >= r.startDate && (!r.lastRun || occ > r.lastRun) && occ <= t && !exists) {
         added.push({
           id: uid(), type: r.type, date: occ, amount: r.amount, categoryId: r.categoryId,
-          methodId: r.methodId, memo: r.memo, recurringId: r.id, createdAt: new Date().toISOString()
+          methodId: r.type === 'saving' ? null : r.methodId, memo: r.memo, recurringId: r.id, createdAt: new Date().toISOString(),
+          ...(r.type === 'saving' ? { dir: r.dir || 'in' } : {})
         });
       }
       mk = addMonth(mk, 1);
@@ -475,13 +527,27 @@ async function runRecurring() {
 /* ---------- 집계 ---------- */
 function monthRecords(mk) { return S.records.filter(r => monthKey(r.date) === mk); }
 function sums(recs) {
-  let income = 0, spend = 0, saving = 0;
+  // saving = 순저축 (넣은 돈 − 꺼낸 돈)
+  let income = 0, spend = 0, savIn = 0, savOut = 0;
   for (const r of recs) {
     if (r.type === 'income') income += r.amount;
-    else if (isSaving(r)) saving += r.amount;
+    else if (isSaving(r)) { if (r.dir === 'out') savOut += r.amount; else savIn += r.amount; }
     else spend += r.amount;
   }
-  return { income, spend, saving };
+  return { income, spend, savIn, savOut, saving: savIn - savOut };
+}
+const signedWon = n => (n < 0 ? '−' : '') + won(Math.abs(n)) + '원';
+const netSaving = rs => rs.reduce((a, r) => a + (r.dir === 'out' ? -r.amount : r.amount), 0);
+// 저축 계좌의 '지금까지 넣은 돈'. 표시를 끈 계좌는 null.
+// 앱 쓰기 전 납입액 { amount, until:'YYYY-MM' }이 있으면 그 금액에 until 다음 달부터의 기록만 더함 (겹치지 않게)
+function accountTotal(id, monthEnd) {
+  const c = cat(id);
+  if (c?.showTotal === false) return null;
+  const base = c?.base;
+  const mine = S.records.filter(r => isSaving(r) && r.categoryId === id && r.date <= monthEnd);
+  if (!base) return netSaving(mine);
+  if (monthKey(monthEnd) < base.until) return null; // 기준 달보다 앞선 달은 합계를 알 수 없어서 표시하지 않음
+  return base.amount + netSaving(mine.filter(r => monthKey(r.date) > base.until));
 }
 function byCategory(recs) {
   const m = new Map();
@@ -526,11 +592,17 @@ function navbar(title, actions) {
 /* ---------- 입력 폼 (입력 화면·수정 시트 공용) ---------- */
 function newDraft(type = 'expense', keep = {}) {
   return {
-    type, amount: 0, categoryId: null, memo: '',
-    methodId: keep.methodId ?? defaultMethod(type),
+    type, amount: 0, categoryId: type === 'saving' ? defaultSavingAccount() : null, memo: '',
+    methodId: type === 'saving' ? null : (keep.methodId ?? defaultMethod(type)),
+    dir: 'in',
     date: keep.date ?? today()
   };
 }
+function defaultSavingAccount() {
+  const act = activeCats('saving');
+  return act.find(c => c.id === S.settings.lastSavingAccount)?.id ?? null;
+}
+const amountTitle = f => f.type === 'expense' ? '쓴 금액' : f.type === 'income' ? '받은 금액' : (f.dir === 'out' ? '꺼낸 금액' : '넣은 금액');
 function defaultMethod(type) {
   const last = S.settings.lastMethod[type];
   const act = activeMethods(type);
@@ -579,8 +651,8 @@ function recordForm(f, { submitLabel, onSubmit, onDelete, recurring = false }) {
       }
     }, mono(c, true), c.name));
 
-    const methods = activeMethods(f.type);
-    if (f.methodId && !methods.some(m => m.id === f.methodId) && method(f.methodId)) methods.push(method(f.methodId));
+    const methods = f.type === 'saving' ? [] : activeMethods(f.type);
+    if (f.type !== 'saving' && f.methodId && !methods.some(m => m.id === f.methodId) && method(f.methodId)) methods.push(method(f.methodId));
     const methodChips = methods.map(m => h('button', {
       class: 'chip', 'aria-pressed': String(f.methodId === m.id),
       onclick: e => {
@@ -589,6 +661,15 @@ function recordForm(f, { submitLabel, onSubmit, onDelete, recurring = false }) {
         e.currentTarget.setAttribute('aria-pressed', 'true');
       }
     }, m.name));
+    const dirChips = [['in', '넣기'], ['out', '꺼내서 생활비로']].map(([d, label]) => h('button', {
+      class: 'chip', 'aria-pressed': String((f.dir || 'in') === d),
+      onclick: e => {
+        f.dir = d;
+        wrap.querySelectorAll('.chip').forEach(b => b.setAttribute('aria-pressed', 'false'));
+        e.currentTarget.setAttribute('aria-pressed', 'true');
+        wrap.querySelector('.amt-tile .ttl').textContent = amountTitle(f);
+      }
+    }, label));
 
     const whenRow = recurring
       ? h('label', { class: 'row' }, h('span', { class: 'grow' }, '매월'),
@@ -598,20 +679,27 @@ function recordForm(f, { submitLabel, onSubmit, onDelete, recurring = false }) {
           h('input', { type: 'date', class: 'pill-date', name: 'date', 'aria-label': '날짜', value: f.date, onchange: e => { f.date = e.target.value || today(); const m = wrap.querySelector('.amt-tile .meta'); if (m) m.textContent = f.date === today() ? '오늘' : dateLabel(f.date); } }));
 
     wrap.replaceChildren(...[
-      h('div', { class: 'seg', role: 'group', 'aria-label': '수입 지출 구분' },
-        ...[['expense', '지출'], ['income', '수입']].map(([t, label]) => h('button', {
+      h('div', { class: 'seg', role: 'group', 'aria-label': '기록 구분' },
+        ...[['expense', '지출'], ['income', '수입'], ['saving', '저축']].map(([t, label]) => h('button', {
           'aria-pressed': String(f.type === t),
-          onclick: () => { if (f.type === t) return; f.type = t; f.categoryId = null; f.methodId = defaultMethod(t); draw(); }
+          onclick: () => {
+            if (f.type === t) return;
+            f.type = t;
+            f.categoryId = t === 'saving' ? defaultSavingAccount() : null;
+            f.methodId = t === 'saving' ? null : defaultMethod(t);
+            f.dir = f.dir || 'in';
+            draw();
+          }
         }, label))),
       h('div', { class: 'tile amt-tile' },
         h('div', { class: 'thead' },
-          h('span', { class: 'ttl' }, f.type === 'expense' ? '쓴 금액' : '받은 금액'),
+          h('span', { class: 'ttl' }, amountTitle(f)),
           h('span', { class: 'meta' }, recurring ? '매달 자동으로 기록' : (f.date === today() ? '오늘' : dateLabel(f.date)))),
         h('label', { class: 'amount' }, amountInput, h('span', { class: 'won' }, '원'))),
-      h('p', { class: 'label', id: fid + '-cat' }, '카테고리'),
+      h('p', { class: 'label', id: fid + '-cat' }, f.type === 'saving' ? '저축 계좌' : '카테고리'),
       h('div', { class: 'cats', role: 'group', 'aria-labelledby': fid + '-cat' }, catBtns),
-      h('p', { class: 'label', id: fid + '-m' }, f.type === 'expense' ? '결제수단' : '입금처'),
-      h('div', { class: 'chips', role: 'group', 'aria-labelledby': fid + '-m' }, methodChips),
+      h('p', { class: 'label', id: fid + '-m' }, f.type === 'expense' ? '결제수단' : f.type === 'income' ? '입금처' : '넣기 또는 꺼내기'),
+      h('div', { class: 'chips', role: 'group', 'aria-labelledby': fid + '-m' }, f.type === 'saving' ? dirChips : methodChips),
       h('div', { class: 'group', style: 'margin-top:var(--space-sm)' },
         whenRow,
         recurring ? h('label', { class: 'row' }, h('span', { class: 'grow' }, '시작일'),
@@ -624,8 +712,8 @@ function recordForm(f, { submitLabel, onSubmit, onDelete, recurring = false }) {
         h('button', {
           class: 'btn', onclick: () => {
             if (!f.amount) { err.textContent = '금액을 입력해 주세요.'; amountInput.focus(); return; }
-            if (!f.categoryId) { err.textContent = '카테고리를 골라 주세요.'; return; }
-            if (!f.methodId) { err.textContent = (f.type === 'expense' ? '결제수단' : '입금처') + '을 골라 주세요. 설정에서 추가할 수 있어요.'; return; }
+            if (!f.categoryId) { err.textContent = f.type === 'saving' ? '저축 계좌를 골라 주세요. 설정에서 추가할 수 있어요.' : '카테고리를 골라 주세요.'; return; }
+            if (f.type !== 'saving' && !f.methodId) { err.textContent = (f.type === 'expense' ? '결제수단' : '입금처') + '을 골라 주세요. 설정에서 추가할 수 있어요.'; return; }
             err.textContent = '';
             onSubmit(f);
           }
@@ -667,11 +755,13 @@ function viewInput() {
       onSubmit: async f => {
         const rec = {
           id: uid(), type: f.type, date: f.date, amount: f.amount, categoryId: f.categoryId,
-          methodId: f.methodId, memo: f.memo.trim(), createdAt: new Date().toISOString()
+          methodId: f.type === 'saving' ? null : f.methodId, memo: f.memo.trim(), createdAt: new Date().toISOString(),
+          ...(f.type === 'saving' ? { dir: f.dir || 'in' } : {})
         };
         await dbPut(rec);
         S.records.push(rec); sortRecords();
-        S.settings.lastMethod[f.type] = f.methodId;
+        if (f.type === 'saving') S.settings.lastSavingAccount = f.categoryId;
+        else S.settings.lastMethod[f.type] = f.methodId;
         await saveSettings();
         UI.draft = newDraft(f.type, { methodId: f.methodId });
         if (document.activeElement) document.activeElement.blur();
@@ -700,7 +790,8 @@ function editRecord(rec) {
   const form = recordForm(f, {
     submitLabel: '수정 저장',
     onSubmit: async f2 => {
-      const upd = { ...rec, type: f2.type, date: f2.date, amount: f2.amount, categoryId: f2.categoryId, methodId: f2.methodId, memo: (f2.memo || '').trim() };
+      const upd = { ...rec, type: f2.type, date: f2.date, amount: f2.amount, categoryId: f2.categoryId, methodId: f2.type === 'saving' ? null : f2.methodId, memo: (f2.memo || '').trim() };
+      if (f2.type === 'saving') upd.dir = f2.dir || 'in'; else delete upd.dir;
       await dbPut(upd);
       Object.assign(rec, upd); sortRecords();
       close(); render(); toast('수정했어요');
@@ -725,14 +816,15 @@ function monthNav() {
 
 function itemRow(r) {
   const saving = isSaving(r);
-  const sub = [r.memo, methodName(r.methodId)].filter(Boolean).join(', ');
+  const out = saving && r.dir === 'out';
+  const sub = [r.memo, saving ? (out ? '생활비로 꺼냄' : '넣음') : methodName(r.methodId)].filter(Boolean).join(', ');
   return h('button', { class: 'row inset', onclick: () => editRecord(r) },
     mono(cat(r.categoryId)),
     h('span', { class: 'grow' },
       h('span', { class: 't' }, catName(r.categoryId), r.recurringId ? h('span', { class: 'badge-repeat' }, '반복') : null),
       sub ? h('span', { class: 's' }, sub) : null),
-    h('span', { class: 'amt' + (r.type === 'income' ? ' income' : saving ? ' saving' : '') },
-      (r.type === 'income' ? '+' : '') + won(r.amount) + '원'));
+    h('span', { class: 'amt' + (r.type === 'income' ? ' income' : out ? ' out' : saving ? ' saving' : '') },
+      (r.type === 'income' ? '+' : out ? '−' : '') + won(r.amount) + '원'));
 }
 
 function groupedList(recs, withYear) {
@@ -740,7 +832,7 @@ function groupedList(recs, withYear) {
   for (const r of recs) { if (!groups.has(r.date)) groups.set(r.date, []); groups.get(r.date).push(r); }
   return [...groups].map(([d, rs]) => {
     const sp = sums(rs);
-    const right = [sp.spend ? `지출 ${won(sp.spend)}원` : null, sp.income ? `수입 ${won(sp.income)}원` : null].filter(Boolean).join(', ');
+    const right = [sp.spend ? `지출 ${won(sp.spend)}원` : null, sp.income ? `수입 ${won(sp.income)}원` : null, (sp.savIn || sp.savOut) ? `저축 ${signedWon(sp.saving)}` : null].filter(Boolean).join(', ');
     return h('div', {},
       h('div', { class: 'ghead' }, h('span', {}, dateLabel(d, withYear)), h('span', {}, right)),
       h('div', { class: 'group' }, rs.map(itemRow)));
@@ -779,7 +871,7 @@ function histBody() {
     if (!hits.length) return h('div', { class: 'empty' }, h('strong', {}, '찾는 기록이 없어요'), '다른 단어로 검색해 보세요.');
     const sp = sums(hits);
     return h('div', {},
-      h('p', { class: 'gfoot' }, `${hits.length}건, 지출 ${won(sp.spend + sp.saving)}원, 수입 ${won(sp.income)}원`),
+      h('p', { class: 'gfoot' }, `${hits.length}건, 지출 ${won(sp.spend)}원, 수입 ${won(sp.income)}원, 저축 ${signedWon(sp.saving)}`),
       groupedList(hits, true));
   }
   const modeSeg = h('div', { class: 'seg', role: 'group', 'aria-label': '보기 방식' },
@@ -870,16 +962,26 @@ function viewStats() {
 
   // 저축 타일: 저축률 + 수입·저축·남은 돈
   const saveTile = h('div', { class: 'tile tt-indigo' },
-    h('div', { class: 'thead' }, h('span', { class: 'ttl' }, '저축률'), h('span', { class: 'meta' }, '저축 ÷ 수입')),
+    h('div', { class: 'thead' }, h('span', { class: 'ttl' }, '이번 달 저축'), h('span', { class: 'meta' }, rateNum == null ? '수입 기록 없음' : `저축률 ${rateNum}%`)),
     h('div', { class: 'tbody' },
-      rateNum == null
-        ? h('p', { class: 'tnote', style: 'margin:0' }, '이 달 수입 기록이 없어서 계산할 수 없어요')
-        : h('p', { class: 'fig' }, rateNum, h('small', {}, '%')),
-      h('div', { class: 'prog', 'aria-hidden': 'true' }, h('i', { style: `transform:scaleX(${Math.min(1, (rateNum || 0) / 100)})` }))),
+      h('p', { class: 'fig' }, (s.saving < 0 ? '−' : '') + won(Math.abs(s.saving)), h('small', {}, '원')),
+      h('div', { class: 'prog', role: 'img', 'aria-label': rateNum == null ? '저축률 계산 불가' : `저축률 ${rateNum}%` }, h('i', { style: `transform:scaleX(${Math.max(0, Math.min(1, (rateNum || 0) / 100))})` }))),
     h('div', { class: 'split' },
-      h('div', {}, h('p', { class: 'k' }, '수입'), h('p', { class: 'v income' }, won(s.income) + '원')),
-      h('div', {}, h('p', { class: 'k' }, '저축'), h('p', { class: 'v saving' }, won(s.saving) + '원')),
-      h('div', {}, h('p', { class: 'k' }, '남은 돈'), h('p', { class: 'v' }, (remain < 0 ? '−' : '') + won(Math.abs(remain)) + '원'))));
+      h('div', {}, h('p', { class: 'k' }, '넣은 돈'), h('p', { class: 'v saving' }, won(s.savIn) + '원')),
+      h('div', {}, h('p', { class: 'k' }, '꺼낸 돈'), h('p', { class: 'v' }, (s.savOut ? '−' : '') + won(s.savOut) + '원')),
+      h('div', {}, h('p', { class: 'k' }, '수입'), h('p', { class: 'v income' }, won(s.income) + '원'))),
+    h('p', { class: 'tnote' }, `남은 돈 ${signedWon(remain)} (수입 − 소비 − 저축)`));
+
+  // 저축 계좌별: 이번 달 순저축 + (표시를 켠 계좌만) 이 달 말까지 넣은 돈 합계
+  const monthEnd = UI.month + '-31';
+  const monthSav = S.records.filter(r => isSaving(r) && monthKey(r.date) === UI.month);
+  const accIds = new Set([...activeCats('saving').map(c => c.id), ...monthSav.map(r => r.categoryId)]);
+  const accRows = [...accIds].map(id => ({ id, month: netSaving(monthSav.filter(r => r.categoryId === id)), total: accountTotal(id, monthEnd) }));
+  const accTile = accRows.length ? h('div', { class: 'tile' },
+    h('div', { class: 'thead' }, h('span', { class: 'ttl' }, '저축 계좌별'), h('span', { class: 'meta' }, accRows.some(a => a.total != null) ? `${m}월 말까지` : `${m}월`)),
+    h('div', { class: 'catlist' }, accRows.map(a => h('div', { class: 'cmprow' }, mono(cat(a.id)),
+      h('span', { class: 'nm' }, catName(a.id), a.total == null ? null : h('span', { class: 's' }, `지금까지 넣은 돈 ${signedWon(a.total)}`)),
+      h('span', { class: 'diff' + (a.month > 0 ? ' save' : a.month === 0 ? ' none' : '') }, a.month ? (a.month > 0 ? '+' : '−') + won(Math.abs(a.month)) + '원' : '이번 달 없음'))))) : null;
 
   // 카테고리별 소비: 한 타일 안에 전부
   const cm = byCategory(cur);
@@ -921,7 +1023,7 @@ function viewStats() {
     monthNav(),
     spendTile, saveTile,
     h('p', { class: 'label', style: 'margin-top:var(--space-lg)' }, '자세히'),
-    catTile, cmpTile);
+    catTile, accTile, cmpTile);
 }
 
 /* ---------- 화면: 설정 ---------- */
@@ -948,15 +1050,16 @@ function moveIn(arr, it, dir, sameGroup) {
   [arr[a], arr[b]] = [arr[b], arr[a]];
 }
 
-function recurringSheet(rule) {
+function recurringSheet(rule, presetType) {
   const isNew = !rule;
-  const f = rule ? { ...rule } : { type: 'expense', amount: 0, categoryId: null, methodId: defaultMethod('expense'), memo: '', day: new Date().getDate(), startDate: today() };
+  const t0 = presetType || 'expense';
+  const f = rule ? { dir: 'in', ...rule } : { type: t0, amount: 0, categoryId: t0 === 'saving' ? defaultSavingAccount() : null, methodId: t0 === 'saving' ? null : defaultMethod(t0), dir: 'in', memo: '', day: new Date().getDate(), startDate: today() };
   let close;
   const form = recordForm(f, {
     recurring: true,
     submitLabel: isNew ? '반복 거래 추가' : '수정 저장',
     onSubmit: async f2 => {
-      const data = { type: f2.type, amount: f2.amount, categoryId: f2.categoryId, methodId: f2.methodId, memo: (f2.memo || '').trim(), day: f2.day, startDate: f2.startDate };
+      const data = { type: f2.type, amount: f2.amount, categoryId: f2.categoryId, methodId: f2.type === 'saving' ? null : f2.methodId, memo: (f2.memo || '').trim(), day: f2.day, startDate: f2.startDate, dir: f2.type === 'saving' ? (f2.dir || 'in') : undefined };
       if (isNew) S.settings.recurring.push({ id: uid(), ...data, lastRun: null, active: true });
       else {
         if (data.startDate < rule.startDate) rule.lastRun = null;
@@ -975,23 +1078,72 @@ function recurringSheet(rule) {
   close = openSheet(isNew ? '반복 거래 추가' : '반복 거래 수정', form);
 }
 
+// 저축 계좌별 '지금까지 넣은 돈': 표시 여부 + 앱 쓰기 전에 이미 넣은 돈
+function totalSheet(c) {
+  const f = { show: c.showTotal !== false, amount: c.base?.amount || 0, until: c.base?.until || addMonth(monthKey(today()), -1) };
+  const months = [];
+  for (let mk = monthKey(today()); mk >= '2023-01'; mk = addMonth(mk, -1)) months.push(mk);
+  if (!months.includes(f.until)) months.push(f.until);
+  const err = h('p', { class: 'err', role: 'alert' });
+  const amountInput = h('input', {
+    name: 'base-amount', inputmode: 'numeric', autocomplete: 'off', placeholder: '0', 'aria-label': '앱 쓰기 전에 넣은 돈',
+    value: f.amount ? won(f.amount) : '',
+    oninput: e => {
+      err.textContent = '';
+      const digits = e.target.value.replace(/\D/g, '').replace(/^0+/, '').slice(0, 12);
+      f.amount = digits ? Number(digits) : 0;
+      e.target.value = digits ? won(f.amount) : '';
+      sizeAmount(e.target);
+    }
+  });
+  sizeAmount(amountInput);
+  const baseBlock = h('div', { hidden: !f.show },
+    h('div', { class: 'tile amt-tile' },
+      h('div', { class: 'thead' }, h('span', { class: 'ttl' }, '앱 쓰기 전에 넣은 돈'), h('span', { class: 'meta' }, '없으면 0')),
+      h('label', { class: 'amount' }, amountInput, h('span', { class: 'won' }, '원'))),
+    h('div', { class: 'group', style: 'margin-top:var(--space-sm)' },
+      h('label', { class: 'row' }, h('span', { class: 'grow' }, '언제까지 넣은 돈'),
+        h('select', { class: 'pill-date', name: 'base-until', 'aria-label': '언제까지 넣은 돈', onchange: e => { f.until = e.target.value; } },
+          months.map(mk => h('option', { value: mk, selected: mk === f.until }, monthLabel(mk) + '까지'))))),
+    h('p', { class: 'gfoot' }, '"지금까지 넣은 돈"이 이 금액에서 시작해요. 고른 달까지 앱에 적은 이 계좌 기록은 이 금액에 들어 있는 것으로 보고 다시 더하지 않아요.'));
+  let close;
+  const body = h('div', { class: 'form', 'data-type': 'saving' },
+    h('div', { class: 'group', style: 'margin-top:var(--space-sm)' },
+      h('label', { class: 'row' }, h('span', { class: 'grow' }, '통계에 지금까지 넣은 돈 표시'),
+        h('input', { type: 'checkbox', role: 'switch', class: 'switch', name: 'show-total', checked: f.show,
+          onchange: e => { f.show = e.target.checked; baseBlock.hidden = !f.show; } }))),
+    h('p', { class: 'gfoot' }, '부모님 돈처럼 내 돈이 아닌 돈이 섞이는 계좌는 꺼 두면 이번 달 증감만 보여요.'),
+    baseBlock,
+    err,
+    h('div', { style: 'margin-top:var(--space-2xs)' },
+      h('button', {
+        class: 'btn', onclick: async () => {
+          c.showTotal = f.show;
+          if (f.show) { if (f.amount) c.base = { amount: f.amount, until: f.until }; else delete c.base; }
+          await saveSettings(); close(); render(); toast('저장했어요');
+        }
+      }, '저장')));
+  close = openSheet(`${c.name} 지금까지 넣은 돈`, body);
+}
+
 async function persist() { await saveSettings(); render(); }
 
 function viewSettings() {
   const st = S.settings;
   const type = UI.settingsType;
   const typeSeg = h('div', { class: 'seg', role: 'group', 'aria-label': '편집할 구분' },
-    ...[['expense', '지출'], ['income', '수입']].map(([t, label]) => h('button', {
+    ...[['expense', '지출'], ['income', '수입'], ['saving', '저축']].map(([t, label]) => h('button', {
       'aria-pressed': String(type === t), onclick: () => { UI.settingsType = t; render(); }
     }, label)));
 
   const catsEditor = listEditor({
     items: activeCats(type), withMono: true,
     protectedFn: c => c.special === 'saving' ? '소비 합계에서 제외' : c.special === 'etc' ? '삭제 불가' : null,
-    onAdd: async name => { st.categories.push({ id: 'c' + uid().slice(0, 8), type, emoji: '', name, special: null, hidden: false, tint: nextTint(type), icon: 'tag' }); await persist(); toast('추가했어요. 왼쪽 아이콘을 눌러 모양을 고를 수 있어요'); },
+    onAdd: async name => { st.categories.push({ id: (type === 'saving' ? 's' : 'c') + uid().slice(0, 8), type, emoji: '', name, special: null, hidden: false, tint: type === 'saving' ? undefined : nextTint(type), icon: ICON_BY_NAME[name] || (type === 'saving' ? 'coins' : 'tag') }); await persist(); toast('추가했어요. 왼쪽 아이콘을 눌러 모양을 고를 수 있어요'); },
     onRename: async c => { const n = prompt('카테고리 이름', c.name); if (n == null || !n.trim()) return; c.name = n.trim(); await persist(); },
     onMove: async (c, d) => { moveIn(st.categories, c, d, x => x.type === type && !x.hidden); await persist(); },
     onDelete: async c => {
+      if (type === 'saving' && activeCats('saving').length <= 1) { alert('저축 계좌는 하나 이상 남겨 두어야 해요.'); return; }
       const used = S.records.filter(r => r.categoryId === c.id).length;
       if (!confirm(used ? `'${c.name}'를 목록에서 숨길까요? 이미 적은 ${used}건은 그대로 '${c.name}'로 남아요.` : `'${c.name}'를 삭제할까요?`)) return;
       c.hidden = true; await persist();
@@ -1014,10 +1166,10 @@ function viewSettings() {
     st.recurring.map(r => h('button', { class: 'row inset', onclick: () => recurringSheet(r) },
       mono(cat(r.categoryId)),
       h('span', { class: 'grow' },
-        h('span', { class: 't' }, `${catName(r.categoryId)} ${r.type === 'income' ? '+' : ''}${won(r.amount)}원`),
-        h('span', { class: 's' }, `매월 ${r.day === 31 ? '말일' : r.day + '일'}, ${methodName(r.methodId)}${r.memo ? ', ' + r.memo : ''}`)),
+        h('span', { class: 't' }, `${catName(r.categoryId)} ${r.type === 'income' ? '+' : r.type === 'saving' && r.dir === 'out' ? '−' : ''}${won(r.amount)}원`),
+        h('span', { class: 's' }, [`매월 ${r.day === 31 ? '말일' : r.day + '일'}`, TYPE_LABEL[r.type] + (r.type === 'saving' ? (r.dir === 'out' ? ' 꺼내기' : ' 넣기') : ''), methodName(r.methodId), r.memo].filter(Boolean).join(', '))),
       chev())),
-    h('button', { class: 'row action', onclick: () => recurringSheet(null) }, '반복 거래 추가'));
+    h('button', { class: 'row action', onclick: () => recurringSheet(null, type) }, '반복 거래 추가'));
 
   const rules = h('textarea', {
     class: 'field', name: 'rules', 'aria-label': '기록 기준', value: st.rules,
@@ -1036,13 +1188,22 @@ function viewSettings() {
   return h('section', {},
     navbar('설정'),
     typeSeg,
-    h('p', { class: 'label' }, type === 'expense' ? '지출 카테고리' : '수입 카테고리'),
+    h('p', { class: 'label' }, type === 'expense' ? '지출 카테고리' : type === 'income' ? '수입 카테고리' : '저축 계좌'),
     catsEditor,
-    h('p', { class: 'label' }, type === 'expense' ? '결제수단' : '입금처'),
-    methodsEditor,
+    type === 'saving' ? h('p', { class: 'gfoot' }, '파킹통장처럼 생활비로 꺼내 쓰는 계좌는 입력할 때 "꺼내서 생활비로"를 고르면 이번 달 저축에서 빠져요.') : null,
+    type === 'saving' ? h('p', { class: 'label' }, '지금까지 넣은 돈') : null,
+    type === 'saving' ? h('div', { class: 'group' },
+      activeCats('saving').map(c => h('button', { class: 'row inset', onclick: () => totalSheet(c) },
+        mono(c),
+        h('span', { class: 'grow' }, h('span', { class: 't' }, c.name),
+          h('span', { class: 's' }, c.showTotal === false ? '표시 안 함' : c.base ? `표시, ${monthLabel(c.base.until)}까지 ${won(c.base.amount)}원부터` : '표시, 앱 기록만')),
+        chev()))) : null,
+    type === 'saving' ? h('p', { class: 'gfoot' }, '통계의 "저축 계좌별"에 계좌마다 누적 금액을 보여 줄지, 앱 쓰기 전에 넣은 돈이 얼마인지 정해요.') : null,
+    type === 'saving' ? null : h('p', { class: 'label' }, type === 'expense' ? '결제수단' : '입금처'),
+    type === 'saving' ? null : methodsEditor,
     h('p', { class: 'label' }, '반복 거래'),
     recList,
-    st.recurring.length ? null : h('p', { class: 'gfoot' }, '통신비, 구독료, 용돈처럼 매달 같은 날 생기는 거래를 등록하면 앱을 열 때 자동으로 기록돼요.'),
+    st.recurring.length ? null : h('p', { class: 'gfoot' }, '통신비, 용돈, 청년도약계좌 납입처럼 매달 같은 날 생기는 거래를 등록하면 앱을 열 때 자동으로 기록돼요.'),
     h('p', { class: 'label' }, '기록 기준'),
     h('div', { class: 'group' }, rules),
     h('p', { class: 'label' }, '백업'),
@@ -1072,7 +1233,7 @@ async function shareOrDownload(filename, text, mime) {
 const stamp = () => today().replace(/-/g, '');
 
 async function exportBackup() {
-  const data = { app: 'gagyebu', version: 1, exportedAt: new Date().toISOString(), settings: S.settings, records: S.records };
+  const data = { app: 'gagyebu', version: 2, exportedAt: new Date().toISOString(), settings: S.settings, records: S.records };
   const ok = await shareOrDownload(`가계부-백업-${stamp()}.json`, JSON.stringify(data), 'application/json');
   if (!ok) return;
   S.settings.lastBackup = new Date().toISOString();
@@ -1090,16 +1251,19 @@ async function importBackup(file) {
   const prevBackup = S.settings.lastBackup;
   S.settings = { ...defaultSettings(), ...data.settings, installHintDismissed: S.settings.installHintDismissed };
   S.settings.lastBackup = [prevBackup, data.settings.lastBackup, data.exportedAt].filter(Boolean).sort().pop() || null;
-  ensureTints(); ensureIcons();
+  ensureTints();
+  const mig = migrateSaving();
+  if (mig.moved.length) await dbPutMany(mig.moved);
+  ensureIcons();
   await saveSettings();
   UI.draft = null; render(); toast(`${data.records.length}건을 불러왔어요`);
 }
 
 function exportCSV() {
   const esc = v => { const s = String(v ?? ''); return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
-  const rows = [['날짜', '구분', '카테고리', '결제수단/입금처', '금액', '메모', '반복']];
+  const rows = [['날짜', '구분', '카테고리/저축 계좌', '결제수단/입금처', '금액', '메모', '반복']];
   [...S.records].sort((a, b) => a.date.localeCompare(b.date)).forEach(r => rows.push([
-    r.date, r.type === 'income' ? '수입' : isSaving(r) ? '저축' : '지출', catName(r.categoryId),
+    r.date, r.type === 'income' ? '수입' : isSaving(r) ? (r.dir === 'out' ? '저축 꺼내기' : '저축 넣기') : '지출', catName(r.categoryId),
     methodName(r.methodId), r.amount, r.memo, r.recurringId ? 'O' : ''
   ]));
   shareOrDownload(`가계부-${stamp()}.csv`, '﻿' + rows.map(r => r.map(esc).join(',')).join('\n'), 'text/csv');
@@ -1111,9 +1275,11 @@ function exportCSV() {
     db = await openDB();
     const kv = await kvGet('settings');
     S.settings = kv?.value ?? defaultSettings();
-    const tinted = ensureTints() | ensureIcons();
-    if (!kv || tinted) await saveSettings();
     S.records = await dbAll(); sortRecords();
+    const mig = migrateSaving();
+    if (mig.moved.length) await dbPutMany(mig.moved);
+    const tinted = ensureTints() | ensureIcons();
+    if (!kv || tinted || mig.changed) await saveSettings();
     const n = await runRecurring();
     render();
     if (n) toast(`반복 거래 ${n}건을 기록했어요`);

@@ -1,6 +1,6 @@
 // 오프라인 실행용 서비스 워커
 // 앱 파일을 고친 뒤 배포할 때 아래 버전 숫자를 올리면 폰에 새 버전이 확실히 반영돼요.
-const CACHE = 'gagyebu-v5';
+const CACHE = 'gagyebu-v9';
 const FILES = ['./', './index.html', './tokens.css', './base.css', './manifest.webmanifest', './icons/icon-180.png', './icons/icon-192.png', './icons/icon-512.png'];
 
 self.addEventListener('install', e => {
