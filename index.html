@@ -127,6 +127,26 @@ button.row:active { background: var(--color-paper-3); }
 .chip:hover { background: var(--color-paper-3); }
 .chip:active { opacity: 0.7; }
 .chip[aria-pressed="true"] { background: var(--color-accent); color: var(--color-accent-ink); font-weight: 600; }
+/* 내역 거르기: 이번 달 합계 칸(누르면 그 종류만) + 그 달에 쓴 카테고리 칩 */
+.sumcells { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-xs); margin-top: var(--space-sm); }
+.sumcell { position: relative; min-width: 0; text-align: left; border: 0; border-radius: var(--radius-card); padding: 10px 12px 11px; background: var(--color-paper-2); box-shadow: var(--shadow-card); font: inherit; color: var(--color-ink); }
+button.sumcell { cursor: pointer; transition: background-color var(--dur-micro) var(--ease-out); }
+button.sumcell:active { opacity: 0.7; }
+.sumcell[aria-pressed="true"] { background: var(--color-accent-soft); box-shadow: inset 0 0 0 2px var(--color-accent); }
+.sumcell .k { display: block; font-size: var(--text-sm); font-weight: 600; color: var(--color-muted); }
+.sumcell .v { display: block; margin-top: 2px; font-size: 1rem; font-weight: 700; letter-spacing: -0.01em; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.sumcell .v.income { color: var(--color-income); }
+.sumcell .v.saving { color: var(--color-saving); }
+.sumcell .chev { position: absolute; top: 10px; right: 9px; width: 12px; height: 12px; color: var(--color-field-edge); }
+.chips.scroll { flex-wrap: nowrap; overflow-x: auto; margin-top: var(--space-xs); padding: 2px 2px 4px; scrollbar-width: none; }
+.chips.scroll::-webkit-scrollbar { display: none; }
+.chips.scroll .chip { flex-shrink: 0; white-space: nowrap; }
+.filtnote { margin: var(--space-sm) var(--space-2xs) 0; font-size: var(--text-sm); font-weight: 600; color: var(--color-ink); }
+/* 통계에서 눌러서 그 기록 보기 */
+.tap { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.tap:active { opacity: 0.6; }
+.tap:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; border-radius: var(--radius-icon); }
+.thead .meta .chev { display: inline-block; width: 12px; height: 12px; margin-left: 4px; vertical-align: -1px; color: var(--color-field-edge); }
 .form[data-type="income"] .chip[aria-pressed="true"] { background: var(--color-income-fill); }
 
 /* 입력칸 */
@@ -400,7 +420,7 @@ const saveSettings = () => tx('kv', 'readwrite', s => s.put({ key: 'settings', v
 /* ---------- 상태 ---------- */
 const S = { settings: null, records: [] };
 const UI = {
-  tab: 'input', month: monthKey(today()), histMode: 'list', selDay: null, query: '',
+  tab: 'input', month: monthKey(today()), histMode: 'list', selDay: null, query: '', fType: null, fCat: null, afterEdit: null,
   draft: null, settingsType: 'expense'
 };
 
@@ -773,8 +793,9 @@ function viewInput() {
 }
 
 /* ---------- 시트 ---------- */
-function openSheet(title, body) {
-  const close = () => { bd.remove(); document.body.style.overflow = ''; };
+function openSheet(title, body, onClose) {
+  // 시트 위에 시트가 겹칠 수 있음 (통계 내역 시트 → 기록 수정). 마지막 시트가 닫힐 때만 스크롤을 풀어 줌
+  const close = () => { bd.remove(); if (!document.querySelector('.backdrop')) document.body.style.overflow = ''; onClose?.(); };
   const bd = h('div', { class: 'backdrop', onclick: e => { if (e.target === bd) close(); } },
     h('div', { class: 'sheet', role: 'dialog', 'aria-modal': 'true', 'aria-label': title },
       h('div', { class: 'sheethead' }, h('h2', {}, title), h('button', { class: 'textbtn', onclick: close }, '닫기')),
@@ -794,16 +815,41 @@ function editRecord(rec) {
       if (f2.type === 'saving') upd.dir = f2.dir || 'in'; else delete upd.dir;
       await dbPut(upd);
       Object.assign(rec, upd); sortRecords();
-      close(); render(); toast('수정했어요');
+      close(); render(); UI.afterEdit?.(); toast('수정했어요');
     },
     onDelete: async () => {
       if (!confirm(`${dateLabel(rec.date)} ${catName(rec.categoryId)} ${won(rec.amount)}원 기록을 삭제할까요?`)) return;
       await dbDel(rec.id);
       S.records = S.records.filter(r => r.id !== rec.id);
-      close(); render(); toast('삭제했어요');
+      close(); render(); UI.afterEdit?.(); toast('삭제했어요');
     }
   });
   close = openSheet('기록 수정', form);
+}
+
+/* ---------- 거른 내역 ---------- */
+const typeTotal = (type, recs) => type === 'saving' ? signedWon(netSaving(recs)) : won(recs.reduce((a, r) => a + r.amount, 0)) + '원';
+
+// 통계에서 누른 항목의 이 달 기록을 바텀시트로. 기록을 고치거나 지우면 시트 내용도 바로 갱신
+function drillSheet(title, type, pick) {
+  const box = h('div', {});
+  const fill = () => {
+    const recs = monthRecords(UI.month).filter(pick);
+    box.replaceChildren(...(recs.length
+      ? [h('p', { class: 'filtnote', style: 'margin-top:0' }, `${recs.length}건, ${typeTotal(type, recs)}`), ...groupedList(recs)]
+      : [h('div', { class: 'empty' }, h('strong', {}, '이 달에는 기록이 없어요'), '다른 달은 내역 탭에서 볼 수 있어요.')]));
+  };
+  fill();
+  UI.afterEdit = fill;
+  openSheet(title, box, () => { if (UI.afterEdit === fill) UI.afterEdit = null; });
+}
+
+// 통계 타일·줄을 누를 수 있게 (키보드 Enter·Space 포함)
+function tappable(el, fn) {
+  el.classList.add('tap'); el.setAttribute('role', 'button'); el.tabIndex = 0;
+  el.addEventListener('click', fn);
+  el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fn(); } });
+  return el;
 }
 
 /* ---------- 화면: 내역 ---------- */
@@ -879,9 +925,39 @@ function histBody() {
       'aria-pressed': String(UI.histMode === m), onclick: () => { UI.histMode = m; render(); }
     }, label)));
   const recs = monthRecords(UI.month);
-  if (UI.histMode === 'cal') return h('div', {}, modeSeg, calendar(recs));
-  if (!recs.length) return h('div', {}, modeSeg, h('div', { class: 'empty' }, h('strong', {}, '이 달에는 기록이 없어요'), '입력 탭에서 첫 기록을 남겨 보세요.'));
-  return h('div', {}, modeSeg, groupedList(recs));
+  const cal = UI.histMode === 'cal';
+  // 이번 달 합계 칸: 목록 보기에서는 누르면 그 종류만, 한 번 더 누르면 전체. 달력 보기에서는 숫자만
+  const s = sums(recs);
+  const cell = (type, label, val, cls) => cal
+    ? h('div', { class: 'sumcell' }, h('span', { class: 'k' }, label), h('span', { class: 'v ' + cls }, val))
+    : h('button', {
+        class: 'sumcell', 'aria-pressed': String(UI.fType === type), 'aria-label': `${label} ${val}원, ${UI.fType === type ? '누르면 전체 보기' : '누르면 이것만 보기'}`,
+        onclick: () => { UI.fType = UI.fType === type ? null : type; UI.fCat = null; render(); }
+      }, h('span', { class: 'k' }, label), h('span', { class: 'v ' + cls }, val), chev());
+  const cells = h('div', { class: 'sumcells', role: cal ? null : 'group', 'aria-label': cal ? null : '이번 달 합계로 거르기' },
+    cell('expense', '지출', won(s.spend), ''), cell('income', '수입', won(s.income), 'income'),
+    cell('saving', '저축', (s.saving < 0 ? '−' : '') + won(Math.abs(s.saving)), 'saving'));
+  if (cal) return h('div', {}, modeSeg, cells, calendar(recs));
+  if (!recs.length && !UI.fType) return h('div', {}, modeSeg, cells, h('div', { class: 'empty' }, h('strong', {}, '이 달에는 기록이 없어요'), '입력 탭에서 첫 기록을 남겨 보세요.'));
+  // 종류를 골랐으면: 그 달에 기록이 있는 카테고리(저축은 계좌)만 건수와 함께, 설정 순서대로
+  let shown = recs, chips = null, note = null;
+  if (UI.fType) {
+    const typed = recs.filter(r => r.type === UI.fType);
+    const counts = new Map();
+    typed.forEach(r => counts.set(r.categoryId, (counts.get(r.categoryId) || 0) + 1));
+    const cats = S.settings.categories.filter(c => c.type === UI.fType && (counts.has(c.id) || c.id === UI.fCat));
+    chips = h('div', { class: 'chips scroll', role: 'group', 'aria-label': UI.fType === 'saving' ? '저축 계좌로 거르기' : '카테고리로 거르기' },
+      h('button', { class: 'chip', 'aria-pressed': String(!UI.fCat), onclick: () => { UI.fCat = null; render(); } }, '전체'),
+      cats.map(c => h('button', {
+        class: 'chip', 'aria-pressed': String(UI.fCat === c.id),
+        onclick: () => { UI.fCat = UI.fCat === c.id ? null : c.id; render(); }
+      }, `${c.name} ${counts.get(c.id) || 0}`)));
+    shown = UI.fCat ? typed.filter(r => r.categoryId === UI.fCat) : typed;
+    if (UI.fCat) note = h('p', { class: 'filtnote' }, `${catName(UI.fCat)} ${shown.length}건, ${typeTotal(UI.fType, shown)}`);
+  }
+  if (!shown.length) return h('div', {}, modeSeg, cells, chips, note,
+    h('div', { class: 'empty' }, h('strong', {}, `이 달에는 ${UI.fCat ? catName(UI.fCat) : TYPE_LABEL[UI.fType]} 기록이 없어요`), '‹ › 로 다른 달을 보거나, 위 칸을 한 번 더 눌러 전체를 볼 수 있어요.'));
+  return h('div', {}, modeSeg, cells, chips, note, groupedList(shown));
 }
 
 function calendar(recs) {
@@ -952,17 +1028,17 @@ function viewStats() {
     trend = diff === 0 ? h('span', {}, '지난달과 같아요')
       : h('span', {}, '지난달보다 ', h('b', { class: diff > 0 ? 'up' : 'down' }, `${pc != null ? Math.abs(pc) + '% ' : ''}${diff > 0 ? '더' : '덜'} 썼어요`));
   }
-  const spendTile = h('div', { class: 'tile tt-pink' },
-    h('div', { class: 'thead' }, h('span', { class: 'ttl' }, '이번 달 소비'), h('span', { class: 'meta' }, `${m}월`)),
+  const spendTile = tappable(h('div', { class: 'tile tt-pink' },
+    h('div', { class: 'thead' }, h('span', { class: 'ttl' }, '이번 달 소비'), h('span', { class: 'meta' }, `${m}월`, chev())),
     h('div', { class: 'tbody' },
       h('p', { class: 'fig' }, won(s.spend), h('small', {}, '원')),
       h('div', { class: 'weekbars', role: 'img', 'aria-label': '주별 소비: ' + wk.map((v, i) => `${i + 1}주 ${won(v)}원`).join(', ') },
         wk.map((v, i) => h('i', { class: i === nowWeek ? 'now' : null, style: `height:${Math.max(8, v / wmax * 100)}%` })))),
-    h('p', { class: 'tnote' }, trend));
+    h('p', { class: 'tnote' }, trend)), () => drillSheet(`${m}월 지출`, 'expense', r => r.type === 'expense'));
 
   // 저축 타일: 저축률 + 수입·저축·남은 돈
-  const saveTile = h('div', { class: 'tile tt-indigo' },
-    h('div', { class: 'thead' }, h('span', { class: 'ttl' }, '이번 달 저축'), h('span', { class: 'meta' }, rateNum == null ? '수입 기록 없음' : `저축률 ${rateNum}%`)),
+  const saveTile = tappable(h('div', { class: 'tile tt-indigo' },
+    h('div', { class: 'thead' }, h('span', { class: 'ttl' }, '이번 달 저축'), h('span', { class: 'meta' }, rateNum == null ? '수입 기록 없음' : `저축률 ${rateNum}%`, chev())),
     h('div', { class: 'tbody' },
       h('p', { class: 'fig' }, (s.saving < 0 ? '−' : '') + won(Math.abs(s.saving)), h('small', {}, '원')),
       h('div', { class: 'prog', role: 'img', 'aria-label': rateNum == null ? '저축률 계산 불가' : `저축률 ${rateNum}%` }, h('i', { style: `transform:scaleX(${Math.max(0, Math.min(1, (rateNum || 0) / 100))})` }))),
@@ -970,7 +1046,7 @@ function viewStats() {
       h('div', {}, h('p', { class: 'k' }, '넣은 돈'), h('p', { class: 'v saving' }, won(s.savIn) + '원')),
       h('div', {}, h('p', { class: 'k' }, '꺼낸 돈'), h('p', { class: 'v' }, (s.savOut ? '−' : '') + won(s.savOut) + '원')),
       h('div', {}, h('p', { class: 'k' }, '수입'), h('p', { class: 'v income' }, won(s.income) + '원'))),
-    h('p', { class: 'tnote' }, `남은 돈 ${signedWon(remain)} (수입 − 소비 − 저축)`));
+    h('p', { class: 'tnote' }, `남은 돈 ${signedWon(remain)} (수입 − 소비 − 저축)`)), () => drillSheet(`${m}월 저축`, 'saving', isSaving));
 
   // 저축 계좌별: 이번 달 순저축 + (표시를 켠 계좌만) 이 달 말까지 넣은 돈 합계
   const monthEnd = UI.month + '-31';
@@ -979,9 +1055,10 @@ function viewStats() {
   const accRows = [...accIds].map(id => ({ id, month: netSaving(monthSav.filter(r => r.categoryId === id)), total: accountTotal(id, monthEnd) }));
   const accTile = accRows.length ? h('div', { class: 'tile' },
     h('div', { class: 'thead' }, h('span', { class: 'ttl' }, '저축 계좌별'), h('span', { class: 'meta' }, accRows.some(a => a.total != null) ? `${m}월 말까지` : `${m}월`)),
-    h('div', { class: 'catlist' }, accRows.map(a => h('div', { class: 'cmprow' }, mono(cat(a.id)),
+    h('div', { class: 'catlist' }, accRows.map(a => tappable(h('div', { class: 'cmprow' }, mono(cat(a.id)),
       h('span', { class: 'nm' }, catName(a.id), a.total == null ? null : h('span', { class: 's' }, `지금까지 넣은 돈 ${signedWon(a.total)}`)),
-      h('span', { class: 'diff' + (a.month > 0 ? ' save' : a.month === 0 ? ' none' : '') }, a.month ? (a.month > 0 ? '+' : '−') + won(Math.abs(a.month)) + '원' : '이번 달 없음'))))) : null;
+      h('span', { class: 'diff' + (a.month > 0 ? ' save' : a.month === 0 ? ' none' : '') }, a.month ? (a.month > 0 ? '+' : '−') + won(Math.abs(a.month)) + '원' : '이번 달 없음')),
+      () => drillSheet(`${m}월 ${catName(a.id)}`, 'saving', r => isSaving(r) && r.categoryId === a.id))))) : null;
 
   // 카테고리별 소비: 한 타일 안에 전부
   const cm = byCategory(cur);
@@ -992,10 +1069,11 @@ function viewStats() {
     sorted.length
       ? h('div', { class: 'catlist' }, sorted.map(([id, v]) => {
           const c = cat(id);
-          return h('div', { class: 'catrow' },
+          return tappable(h('div', { class: 'catrow' },
             h('div', { class: 'top' }, mono(c), h('span', { class: 'nm' }, catName(id)),
               h('span', { class: 'v' }, won(v) + '원', h('span', { class: 'pct' }, Math.round(v / s.spend * 100) + '%'))),
-            h('div', { class: 'track', 'aria-hidden': 'true' }, h('div', { class: 'fill', style: `transform:scaleX(${Math.max(0.02, v / max)})` })));
+            h('div', { class: 'track', 'aria-hidden': 'true' }, h('div', { class: 'fill', style: `transform:scaleX(${Math.max(0.02, v / max)})` }))),
+            () => drillSheet(`${m}월 ${catName(id)}`, 'expense', r => r.type === 'expense' && r.categoryId === id));
         }))
       : h('p', { class: 'tnote' }, '이 달에는 소비 기록이 없어요. 입력 탭에서 기록하면 여기에 모여요.'));
 
@@ -1010,9 +1088,10 @@ function viewStats() {
         let d, cls = '';
         if (!pv) { d = '새로 씀'; cls = 'up'; }
         else { const x = pctText(c, pv); d = (x > 0 ? '+' : x < 0 ? '−' : '') + Math.abs(x) + '%'; cls = x > 0 ? 'up' : x < 0 ? 'down' : ''; }
-        return h('div', { class: 'cmprow' }, mono(cat(id)),
+        return tappable(h('div', { class: 'cmprow' }, mono(cat(id)),
           h('span', { class: 'nm' }, catName(id), h('span', { class: 's' }, `${won(c)}원, 지난달 ${won(pv)}원`)),
-          h('span', { class: 'diff ' + cls }, d));
+          h('span', { class: 'diff ' + cls }, d)),
+          () => drillSheet(`${m}월 ${catName(id)}`, 'expense', r => r.type === 'expense' && r.categoryId === id));
       });
     cmpTile = h('div', { class: 'tile' },
       h('div', { class: 'thead' }, h('span', { class: 'ttl' }, `${pm}월과 비교`), h('span', { class: 'meta' }, `${pm}월 소비 ${won(p.spend)}원`)),
