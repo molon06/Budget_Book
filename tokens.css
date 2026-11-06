@@ -25,7 +25,7 @@
   --color-rule: #D8D8DC; --color-field-edge: #8E8E93;
   /* 포인트 색 한 가지를 세 단계로: 채움(버튼), 글자·아이콘, 연한 바탕 */
   --color-accent: #0071E3; --color-accent-text: #0068D6; --color-accent-ink: #FFFFFF; --color-accent-soft: #E8F1FD; --color-focus: #0071E3;
-  --color-income: #23873D; --color-income-fill: #23873D; --color-income-soft: #E6F4EA; --color-saving: #5856D6; --color-danger: #DB3329; --color-error: #DB3329;
+  --color-income: #23873D; --color-income-fill: #23873D; --color-income-soft: #E6F4EA; --color-saving: #5856D6; --color-saving-fill: #5856D6; --color-saving-soft: #EEEEFC; --color-danger: #DB3329; --color-error: #DB3329;
   --color-glass: rgb(255 255 255 / 0.74); --color-glass-edge: rgb(0 0 0 / 0.08);
   --color-hud: rgb(28 28 30 / 0.94); --color-hud-ink: #FFFFFF;
   --color-scrim: rgb(0 0 0 / 0.3);
@@ -57,7 +57,7 @@
     --color-ink: #FFFFFF; --color-ink-2: #EBEBF0; --color-muted: #98989D;
     --color-rule: #38383A; --color-field-edge: #7C7C80;
     --color-accent: #0071E3; --color-accent-text: #409CFF; --color-accent-ink: #FFFFFF; --color-accent-soft: #0F2740; --color-focus: #409CFF;
-    --color-income: #30D158; --color-income-fill: #23873D; --color-income-soft: #12301B; --color-saving: #7876EA; --color-danger: #FF453A; --color-error: #FF453A;
+    --color-income: #30D158; --color-income-fill: #23873D; --color-income-soft: #12301B; --color-saving: #8E8CFF; --color-saving-fill: #5856D6; --color-saving-soft: #22224A; --color-danger: #FF453A; --color-error: #FF453A;
     --color-glass: rgb(44 44 46 / 0.78); --color-glass-edge: rgb(255 255 255 / 0.08);
     --color-hud: rgb(58 58 60 / 0.95);
     --color-scrim: rgb(0 0 0 / 0.55);
